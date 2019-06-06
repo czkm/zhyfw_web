@@ -1,0 +1,68 @@
+<!--  -->
+<template>
+  <div>
+    <el-table
+      :data="tableData"
+      min-eight="400"
+      border
+      style="width: 100%;margin-top: 30px;"
+    >
+      <el-table-column type="selection" width="55"/>
+      <el-table-column label="数据">
+        <template slot-scope="scope">{{ scope.row.interfacedata }}</template>
+      </el-table-column>
+      <el-table-column label="接口状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.intertype==0">可用</span>
+          <span v-else>不可用</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="申请时间">
+        <template slot-scope="scope">{{ scope.row.appleytime|timeff }}</template>
+      </el-table-column>
+      <el-table-column label="appKey">
+        <template slot-scope="scope">{{ scope.row.appkey }}</template>
+      </el-table-column>
+      <el-table-column label="appsecret">
+        <template slot-scope="scope">{{ scope.row.appsecret }}</template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="160">
+        <template slot-scope="scope">
+          <el-button style="color: #007bff;" size="small" @click="handleEdit(scope.$index, scope.row)">
+            <i class="fa fa-telegram"/>
+            设置白名单</el-button>
+
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        {
+          interfacedata: '二维码地址接口',
+          intertype: '0',
+          appleytime: '201405069223',
+          appkey: '63c63651b1a26625',
+          appsecret: '675759f9f382299baf9396c9ebb4d7fe'
+
+        },
+        {
+          interfacedata: '二维码地址接口',
+          intertype: '1',
+          appleytime: '201405069223',
+          appkey: '63c63651b1a26625',
+          appsecret: '675759f9f382299baf9396c9ebb4d7fe'
+
+        }
+      ]
+    }
+  }
+}
+</script>
+<style scoped  lang='scss'>
+</style>
