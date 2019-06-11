@@ -167,24 +167,24 @@ export default {
             {
               title: '密码修改',
               location: 'safe_password',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-cloud-upload'
             },
             {
               title: '系统日志',
               location: 'safe_syslog',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-cubes'
             }
           ]
         },
         {
           title: '业务管理',
           location: 'eventManage',
-          iconCls: 'fa el-icon-service',
+          iconCls: 'fa fa-eur',
           children: [
             {
               title: '接口管理',
               location: 'event_interface',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-square-o'
             }
           ]
         },
@@ -196,7 +196,7 @@ export default {
             {
               title: '数据统计',
               location: 'data_datatotal',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-file-powerpoint-o'
             }
           ]
         },
@@ -208,12 +208,12 @@ export default {
             {
               title: '创建工单',
               location: 'order_creat',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-braille'
             },
             {
               title: '工单列表',
               location: 'order_list',
-              iconCls: 'fa el-icon-document'
+              iconCls: 'fa fa-deafness '
             }
           ]
         }

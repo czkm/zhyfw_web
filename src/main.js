@@ -11,6 +11,8 @@ import tool from '../tool/tool'
 import axios from 'axios'
 import echarts from 'echarts'
 
+import 'font-awesome/css/font-awesome.css'
+
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
