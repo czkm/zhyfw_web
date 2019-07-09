@@ -35,15 +35,15 @@
         <!--左侧导航菜单-->
 
         <el-menu :collapse="collapsed" :unique-opened ="true" :router ="true" :default-active="$route.path" >
-          <el-menu-item v-for="child1 in menuList" v-if="!child1.children" :index="'/'+child1.location" :key="child1.id">
-            <i :class="child1.iconCls" style="font-size: 16px;"/>
+          <el-menu-item v-for="child1 in menuList" v-if="!child1.children" :index="'/'+child1.location" :key="child1.id" style="padding-left: 0;">
+            <i :class="child1.iconCls" class="menu_icon" style="font-size: 16px;"/>
             <span slot="title">{{ child1.title }}</span>
           </el-menu-item>
 
           <!-- 1级菜单 -有子节点-->
           <el-submenu v-for="child1 in menuList" v-if="child1.children" :index="'/'+child1.location" :key="child1.id">
             <!-- 2级菜单 无子节点-->
-            <el-menu-item v-for="child2 in child1.children" v-if="!child2.children" :index="'/'+child2.location" :key="child2.id" class="menuTwo">
+            <el-menu-item v-for="child2 in child1.children" v-if="!child2.children" :index="'/'+child2.location" :key="child2.id" class="menuTwo" style="padding-left: 70px;">
               <i :class="child2.iconCls"/>
               {{ child2.title }}
             </el-menu-item>
@@ -53,7 +53,7 @@
             </template>
 
             <!-- 判断二级 有子节点  -->
-            <el-submenu v-for="child2 in child1.children" v-if="child2.children" :index="'/'+child2.location" :key="child2.id" class="menuTwo">
+            <el-submenu v-for="child2 in child1.children" v-if="child2.children" :index="'/'+child2.location" :key="child2.id" class="menuTwo" style="padding-left: 70px;">
               <template slot="title">
                 <div>
                   <i :class="child2.iconCls"/>
@@ -179,7 +179,7 @@ export default {
         {
           title: '业务管理',
           location: 'eventManage',
-          iconCls: 'fa fa-eur',
+          iconCls: 'fa fa-cubes',
           children: [
             {
               title: '接口管理',
@@ -325,6 +325,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// .menu_icon {
+//   width: 20px;
+//   height: 20px;
+//   left: 50px;
+//   background-color: red;
+// }
 .container {
   position: absolute;
   top: 0;
@@ -409,6 +415,7 @@ export default {
         .item {
           position: relative;
         }
+
         .submenu {
           position: absolute;
           top: 0;
