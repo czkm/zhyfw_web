@@ -19,7 +19,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   background-color: #fff;
-
   /* margin-top: 60px; */
   position: absolute;
   top: 0;
@@ -31,8 +30,8 @@ body {
   padding: 0;
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
-  overflow: scroll;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
+  /* overflow: scroll; */
 }
 
 .fl {
@@ -50,7 +49,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 .el-tabs__nav {
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 .el_hr {
   width: 100%;
@@ -58,7 +57,7 @@ body {
   background-color: #484b4717;
   position: relative;
 }
-.el-form-item{
-  margin: 10px
+.el-form-item {
+  margin: 10px;
 }
 </style>

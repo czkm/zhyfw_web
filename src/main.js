@@ -11,12 +11,17 @@ import tool from '../tool/tool'
 import axios from 'axios'
 import echarts from 'echarts'
 
+import BaiduMap from 'vue-baidu-map'
 import 'font-awesome/css/font-awesome.css'
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key*/
+  ak: 'GPLiRUB8jqiCMwdZc0Y2OFINDjWHz8WO'
+})
 Vue.use(ElementUI)
 Vue.use(tool)
 

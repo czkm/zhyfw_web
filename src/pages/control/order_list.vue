@@ -8,19 +8,7 @@
           <el-form-item :label-width="searchlabel" class="fl" label="冻结人">
             <el-input v-model="searchform.username" placeholder="冻结人" class="el_input"/>
           </el-form-item>
-          <el-form-item :label-width="searchlabel" class="fl" label="冻结时间">
-            <el-col :span="15">
-              <el-date-picker
-                :clearable="false"
-                v-model="searchform.selecttime"
-                value-format="yyyy-MM-dd"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              />
-            </el-col>
-          </el-form-item>
+
           <el-form-item class="fl">
             <el-button
               type="primary"
@@ -244,7 +232,7 @@ export default {
   }
 }
 </script>
- <style lang="scss" scoped>
+ <style lang="scss" scoped >
  .table_class{
    padding: 20px
  }

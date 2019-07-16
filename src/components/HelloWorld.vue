@@ -89,7 +89,11 @@
             </el-tabs>
           </el-col>
 
-          <el-col :span="24" :class="{'shadow':$route.path!=='/data_datatotal'}" class="content-wrapper ">
+          <el-col
+            :span="24"
+            :class="{'shadow'
+            :shadow_control()}"
+            class="content-wrapper ">
             <transition name="fade" mode="out-in">
               <router-view/>
             </transition>
@@ -143,7 +147,7 @@ export default {
     return {
       sysUserAvatar:
         'https://y.gtimg.cn/music/photo_new/T001R300x300M000002eEEYT4ACDdX.jpg',
-      sysName: '智慧云服务',
+      sysName: '神牛云',
       QueryUrl: this.$store.state.BaseUrl,
       sysTitle: '1213',
       sysUserName: 'admin', // 用户名
@@ -152,7 +156,7 @@ export default {
       Editdiolog: false, // 编辑框
       formLabelWidth: '80px',
       optionform: {},
-
+      isshadow: true, // 不显示阴影列表
       menuList: [
         {
           title: '首页',
@@ -160,13 +164,28 @@ export default {
           iconCls: 'fa fa-camera-retro'
         },
         {
-          title: '安全中心',
-          location: 'safeManage',
+          title: '概况',
+          location: 'control_general',
+          iconCls: 'fa fa-camera-retro'
+        },
+        {
+          title: '产品服务',
+          location: 'control_product',
+          iconCls: 'fa fa-camera-retro'
+        },
+        {
+          title: '工单管理',
+          location: 'control_order',
+          iconCls: 'fa fa fa-deafness'
+        },
+        {
+          title: '用户中心',
+          location: 'userManage',
           iconCls: 'fa fa-id-card-o',
           children: [
             {
-              title: '密码修改',
-              location: 'safe_password',
+              title: '用户信息',
+              location: 'control_user',
               iconCls: 'fa fa-cloud-upload'
             },
             {
@@ -183,8 +202,8 @@ export default {
           children: [
             {
               title: '接口管理',
-              location: 'event_interface',
-              iconCls: 'fa fa-square-o'
+              location: 'control_interface',
+              iconCls: 'fa fa-id-card-o'
             }
           ]
         },
@@ -199,24 +218,24 @@ export default {
               iconCls: 'fa fa-file-powerpoint-o'
             }
           ]
-        },
-        {
-          title: '工单管理',
-          location: 'orderManage',
-          iconCls: 'fa fa-id-card-o',
-          children: [
-            {
-              title: '创建工单',
-              location: 'order_creat',
-              iconCls: 'fa fa-braille'
-            },
-            {
-              title: '工单列表',
-              location: 'order_list',
-              iconCls: 'fa fa-deafness '
-            }
-          ]
         }
+        // {
+        //   title: '工单管理',
+        //   location: 'orderManage',
+        //   iconCls: 'fa fa-id-card-o',
+        //   children: [
+        //     {
+        //       title: '创建工单',
+        //       location: 'order_creat',
+        //       iconCls: 'fa fa-braille'
+        //     },
+        //     {
+        //       title: '工单列表',
+        //       location: 'order_list',
+        //       iconCls: 'fa fa-deafness '
+        //     }
+        //   ]
+        // }
       ]
     }
   },
@@ -254,13 +273,20 @@ export default {
   },
 
   mounted() {
-    // const userneme = this.getCookie('sjhm')
-    // if (userneme) {
-    //   this.sysUserName = userneme || ''
-    // }
     this.optionMeun()
+    // this.shadow_control()
   },
   methods: {
+    // 是否显示阴影
+    shadow_control() {
+      console.log(this.$route.path)
+      if (this.$route.path === '/data_datatotal' ||
+      this.$route.path === '/control_product') {
+        return false
+      } else {
+        return true
+      }
+    },
     // 配置菜单
     optionMeun() {
       // 判断菜单是否有值
@@ -324,7 +350,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss" >
 // .menu_icon {
 //   width: 20px;
 //   height: 20px;
