@@ -8,19 +8,26 @@
         :model="repassword"
         label-position="left"
         class="repassword"
-        label-width="80px">
-        <el-form-item label="手机号码" prop="tel">
-          <el-input v-model="repassword.tel" class="repassword_input" clearable placeholder="手机号码"/>
+        label-width="80px"
+      >
+        <el-form-item label="手机号码" prop="phone">
+          <el-input
+            v-model="repassword.phone"
+            class="repassword_input"
+            clearable
+            placeholder="手机号码"
+          />
         </el-form-item>
       </el-form>
-      <Vcode
-        :show="isShow"
-        @onSuccess="onSuccess()"
-        @onClose="onClose()"
-      />
+      <Vcode :show="isShow" @onSuccess="onSuccess()" @onClose="onClose()" />
       <el-button class="form_login_btn" type="primary" @click="handleverify()">verify</el-button>
-      <el-button class="form_login_btn" type="primary" @click="handlenext()">下一步</el-button>
-    </el-card >
+      <el-button
+        :loading="next_loading"
+        class="form_login_btn"
+        type="primary"
+        @click="handlenext()"
+      >下一步</el-button>
+    </el-card>
 
     <!-- 下一步 -->
     <el-card v-if="nexttap" class="login_mian">
@@ -29,38 +36,64 @@
         ref="repassword_form"
         :model="repassword_form"
         :rules="rule"
-
         label-position="left"
         class="repassword_form"
-        label-width="80px">
-        <el-form-item label="短信验证" class="form_item">
-          <el-button :disabled="isreset" class="message_btn" type="primary">重新获取</el-button>
-          <el-input v-model="repassword_form.verify" maxlength="6" clearable placeholder="手机号码"/>
+        label-width="80px"
+      >
+        <el-form-item label="短信验证" class="form_item" prop="code">
+          <el-button
+            v-show="btn_show"
+            class="message_btn"
+            type="primary"
+            @click="handlenext()"
+          >重新获取</el-button>
+          <el-button v-show="!btn_show" :disabled="true" class="message_btn" type="primary" >{{ count }} s</el-button>
+
+          <el-input v-model="repassword_form.code" maxlength="6" clearable placeholder="验证码" />
         </el-form-item>
-        <el-form-item class="form_item" label="输入密码" prop="code">
-          <el-input v-model="repassword_form.code" minlength="6" maxlength="12" clearable placeholder="长度应在6-12位"/>
+        <el-form-item class="form_item" label="输入密码" prop="password">
+          <el-input
+            v-model="repassword_form.password"
+            minlength="6"
+            maxlength="12"
+            clearable
+            placeholder="长度应在6-12位"
+          />
         </el-form-item>
-        <el-form-item class="form_item" label="确认密码" prop="code">
-          <el-input v-model="repassword_form.code" minlength="6" maxlength="12" clearable placeholder="再次输入密码"/>
+        <el-form-item class="form_item" label="确认密码" prop="password">
+          <el-input
+            v-model="repassword_form.repassword"
+            minlength="6"
+            maxlength="12"
+            clearable
+            placeholder="再次输入密码"
+          />
         </el-form-item>
       </el-form>
 
-      <el-button class="form_login_btn" type="primary" @click="handlerepassword()">确认</el-button>
-
-    </el-card >
+      <el-button
+        :loading="loading"
+        class="form_login_btn"
+        type="primary"
+        @click="handlerepassword()"
+      >确认</el-button>
+    </el-card>
     <div v-if="resuccess" class="success_bg">
       <div class="success_card">
         <div class="success_icon">
-          <img class="imgsty" src="../../assets/success_icon.png" alt="">
+          <img class="imgsty" src="../../assets/success_icon.png" alt >
         </div>
         <div class="login_from_bottom">
-          <div class="bottom_ltem fl"><span @click="gotolink('login')">重新登录</span></div>
-          <div class="bottom_ltem fr"><span @click="gotolink('showmain')">返回首页</span></div>
+          <div class="bottom_ltem fl">
+            <span @click="gotolink('login')">重新登录</span>
+          </div>
+          <div class="bottom_ltem fr">
+            <span @click="gotolink('showmain')">返回首页</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -81,9 +114,16 @@ export default {
       }
     }
     return {
+      btn_show: true, // 短信验证码按钮
+      count: '',
+      timer: null,
+      next_loading: false,
+      loading: false,
       repassword: {
         agree: true
       },
+      baseurl: `${this.$store.state.BaseUrl}/user`,
+
       isShow: false, // 验证码模态框是否出现
       isVerify: false, // 是否完成验证
       repassword_form: {},
@@ -92,11 +132,15 @@ export default {
       resuccess: false, // 成功页面
       // 校验规则
       rule: {
-        tel: [
+        phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { validator: checktel, trigger: 'blur' }
         ],
         code: [
+          { required: true, message: '请输入正确验证码', trigger: 'blur' },
+          { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
+        ],
+        password: [
           { required: true, message: '请输入正确验证码', trigger: 'blur' },
           { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' }
         ]
@@ -119,28 +163,74 @@ export default {
     handleverify() {
       this.isShow = true
     },
+    // 60s短信
+    getCode() {
+      const TIME_COUNT = 60
+      if (!this.timer) {
+        this.count = TIME_COUNT
+        this.btn_show = false
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--
+          } else {
+            this.btn_show = true
+            clearInterval(this.timer)
+            this.timer = null
+          }
+        }, 1000)
+      }
+    },
     handlenext() {
       if (this.isVerify) {
-        this.nexttap = true
+        this.next_loading = true
+        const phone = this.repassword.phone
+        this.$axios
+          .post(this.baseurl + '/get_phone_code', {
+            phone,
+            lx: 'wj'
+          })
+          .then(res => {
+            if (res.data.code === 200) {
+              this.getCode()
+              this.nexttap = true
+              this.msgalert('发送成功', 'success')
+              this.codeVerify = true
+            }
+          })
       } else {
+        this.next_loading = false
+
         this.$message({
           message: '请先成验证',
-          type: 'error'
+          type: 'warning'
         })
       }
     },
     handlerepassword() {
       const password = this.repassword_form.password
       const repassword = this.repassword_form.repassword
+      const code = this.repassword_form.code
+      const fzrlxdh = this.repassword.phone
       if (password === repassword) {
+        this.loading = true
         this.$axios
-          .post(this.baseurl + '/adm_xtgl_djrz', {
+          .post(this.baseurl + '/forget_password', {
+            fzrlxdh,
+            code,
             password
           })
           .then(res => {
-            console.log(11)
+            if (res.data.code === 200) {
+              this.msgalert(res.data.msg, 'success')
+              this.resuccess = true
+              this.loading = false
+            } else {
+              this.loading = false
+              this.msgalert(res.data.msg, 'error')
+            }
           })
       } else {
+        this.loading = false
         this.$message({
           message: '2次输入的密码不同哦！',
           type: 'error'

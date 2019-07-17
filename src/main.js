@@ -7,8 +7,9 @@ import store from './store/index'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import tool from '../tool/tool'
 import axios from 'axios'
+import tool from './api/tool'
+import Haxios from './api/ajax.js'
 import echarts from 'echarts'
 
 import BaiduMap from 'vue-baidu-map'
@@ -16,12 +17,15 @@ import 'font-awesome/css/font-awesome.css'
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
+Vue.prototype.$Haxios = Haxios
+
 Vue.config.productionTip = false
 
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key*/
   ak: 'GPLiRUB8jqiCMwdZc0Y2OFINDjWHz8WO'
 })
+
 Vue.use(ElementUI)
 Vue.use(tool)
 

@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -12,14 +11,32 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    BaseUrl: 'http://wysn.fancybull.cn/farmbackstage', // 'http://172.16.0.67:8088/farmbackstage', ,
+    BaseUrl: 'http://172.16.0.128:9902/fancybull-api', // 'http://172.16.0.67:8088/farmbackstage', ,
     rootArry: [], // 全局菜单
-    options: [
-      { name: '首页', route: '/main' }],
-    activeIndex: '/mian'
+    options: [{
+      name: '首页',
+      route: '/main'
+    }],
+    activeIndex: '/mian',
+    userInfo: '',
+    menusList: [],
+    islogin: false,
+    token: ''
+
     // userInfo: {}
   },
   mutations: {
+    // 获取用户信息
+    get_userinfo(state, info) {
+      state.userInfo = info.fzrlxdh
+      state.token = info.token
+      state.islogin = true
+    },
+    // 获取菜单列表
+    get_menulist(state, list) {
+      state.menusList = list
+    },
+
     // 添加tabs
     add_tabs(state, data) {
       this.state.options.push(data)
