@@ -1,48 +1,50 @@
 <!--  -->
 <template>
   <div>
-    <el-table
-      :data="tableData"
-      min-eight="400"
-      border
-      style="width: 100%;margin-top: 30px;"
-    >
-      <el-table-column type="selection" width="55" fixed/>
+    <el-table :data="tableData" min-eight="400" border style="width: 100%;margin-top: 30px;">
+      <el-table-column type="selection" width="55" fixed />
       <el-table-column label="接口名">
-        <template slot-scope="scope">{{ scope.row.interfacedata }}</template>
+        <template slot-scope="scope">{{ scope.row.service_name }}</template>
       </el-table-column>
-      <el-table-column label="接口状态" >
+      <el-table-column label="接口状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.intertype==0">可用</span>
+          <span v-if="scope.row.is_del==0">可用</span>
           <span v-else>不可用</span>
         </template>
       </el-table-column>
       <el-table-column label="申请时间">
-        <template slot-scope="scope">{{ scope.row.appleytime|timeff }}</template>
+        <template slot-scope="scope">{{ scope.row.create_time|timeff }}</template>
       </el-table-column>
       <el-table-column label="到期时间">
-        <template slot-scope="scope">{{ scope.row.appleytime|timeff }}</template>
+        <template slot-scope="scope">{{ scope.row.update_time|timeff }}</template>
       </el-table-column>
       <el-table-column label="appid">
-        <template slot-scope="scope">{{ scope.row.appsecret }}</template>
+        <template slot-scope="scope">{{ scope.row.authorize_service_id }}</template>
       </el-table-column>
       <el-table-column label="publicKey">
         <template slot-scope="scope">{{ scope.row.appkey }}</template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="200" >
+      <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <!-- <el-button style="color: #007bff;" size="small" @click="handleEdit(scope.$index, scope.row)">
             <i class="fa fa-telegram"/>
             设置白名单
           </el-button>
           <el-button style="color: #007bff;" size="small" @click="handleEdit(scope.$index, scope.row)">
-            服务介绍</el-button> -->
-          <el-button style="color: #007bff;" size="small" @click="handleEdit(scope.$index, scope.row)">
-            <i class="fa fa-telegram"/>
+          服务介绍</el-button>-->
+          <el-button
+            style="color: #007bff;"
+            size="small"
+            @click="handleEdit(scope.$index, scope.row)"
+          >
+            <i class="fa fa-telegram" />
             设置白名单
           </el-button>
-          <el-button style="color: #007bff;" size="small" @click="handleEdit(scope.$index, scope.row)">
-            介绍</el-button>
+          <el-button
+            style="color: #007bff;"
+            size="small"
+            @click="handleEdit(scope.$index, scope.row)"
+          >介绍</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -53,22 +55,21 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          interfacedata: '二维码地址接口',
-          intertype: '0',
-          appleytime: '201405069223',
-          appkey: '63c63651b1a26625',
-          appsecret: '675759f9f382299baf9396c9ebb4d7fe'
-        },
-        {
-          interfacedata: '二维码地址接口',
-          intertype: '1',
-          appleytime: '201405069223',
-          appkey: '63c63651b1a26625',
-          appsecret: '675759f9f382299baf9396c9ebb4d7fe'
+      token: this.$store.state.token,
+      baseurl: this.$store.state.BaseUrl + '/console',
+      tableData: []
+    }
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      this.$Haxios(this.baseurl + '/selectservice', {}, this.token).then(
+        res => {
+          this.tableData = res.data.result
         }
-      ]
+      )
     }
   }
 }

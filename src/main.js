@@ -17,7 +17,46 @@ import 'font-awesome/css/font-awesome.css'
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
-Vue.prototype.$Haxios = Haxios
+Vue.prototype.$Haxios = Haxios // 请求头axios
+
+// axios配置
+axios.defaults.timeout = 5000
+// http response 拦截器
+axios.interceptors.response.use(function(response) {
+  // 对响应数据做点什么
+  if (response.data.code === 311) {
+    // 311无token
+    ElementUI.Message.error(response.data.msg)
+    // top.location = store.state.loginUrl
+  }
+  if (response.data.code === 304) {
+    // 304无token
+    ElementUI.Message.error(response.data.msg)
+    localStorage.clear()
+    router.push({
+      path: '/login'
+    })
+  }
+  return response
+},
+function(err) {
+  if (err.response) {
+    if (err.response.data.code === 304) {
+      ElementUI.Message.error(err.response.data.msg)
+      router.push({
+        path: '/login'
+      })
+    } else if (err.response.data.code === 404) {
+      router.push({
+        path: '/notfound'
+      })
+    }
+  } else {
+    // ElementUI.Message.error('连接超时！！')
+  }
+
+  return Promise.reject(err)
+})
 
 Vue.config.productionTip = false
 
@@ -40,6 +79,8 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })

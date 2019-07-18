@@ -1,7 +1,9 @@
 <template>
   <div class="login_body">
     <el-card class="login_mian">
-      <div class="login_title">忘记密码</div>
+      <div class="login_title">
+        <el-button class="fl" icon="el-icon-arrow-left" circle @click=" gotolink('login')" />
+        忘记密码</div>
       <el-form
         ref="repassword"
         :rules="rule"

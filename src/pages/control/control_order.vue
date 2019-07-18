@@ -1,40 +1,43 @@
 <template>
-  <el-tabs type="border-card">
-    <el-tab-pane label="用户管理">
+  <el-tabs v-model="activeName" type="border-card">
+    <el-tab-pane label="提交工单" name="addorder">
       <el-row>
         <el-col :span="10">
           <div class="contain_item">
-            <div class=" table_class">
-              <el-form ref="order_form" :model="order_form" label-width="80px" >
-                <el-form-item label="活动名称">
-                  <el-input v-model="order_form.name"/>
+            <div class="table_class">
+              <el-form ref="order_form" :rules="rule" :model="order_form" label-width="80px">
+                <el-form-item label="标题" prop="title" class="order_form_item">
+                  <el-input v-model="order_form.title" />
                 </el-form-item>
-                <el-form-item label="活动形式">
-                  <el-input v-model="order_form.desc" type="textarea"/>
+                <el-form-item label="问题描述" prop="ms" class="order_form_item">
+                  <el-input
+                    v-model="order_form.ms"
+                    maxlength="200"
+                    show-word-limit
+                    type="textarea"
+                  />
                 </el-form-item>
-                <el-form-item label="活动名称">
-                  <el-input v-model="order_form.phone"/>
+                <el-form-item label="联系电话" prop="lxrdh" class="order_form_item">
+                  <el-input v-model="order_form.lxrdh" />
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                  <el-button type="primary" @click="add_order()">立即创建</el-button>
                   <el-button>取消</el-button>
                 </el-form-item>
               </el-form>
             </div>
-
           </div>
         </el-col>
       </el-row>
     </el-tab-pane>
-    <el-tab-pane label="我的工单">
+    <el-tab-pane label="我的工单" name="orderlist">
       <!-- 表头搜索 -->
       <el-row>
         <el-col :span="24">
           <el-form :inline="true" :model="searchform" class="demo-form-inline">
             <el-form-item :label-width="searchlabel" class="fl" label="冻结人">
-              <el-input v-model="searchform.username" placeholder="冻结人" class="el_input"/>
+              <el-input v-model="searchform.username" placeholder="冻结人" class="el_input" />
             </el-form-item>
-
             <el-form-item class="fl">
               <el-button
                 type="primary"
@@ -49,7 +52,7 @@
           </el-form>
         </el-col>
       </el-row>
-      <div class="el_hr"/>
+      <div class="el_hr" />
       <!-- 功能按钮组 -->
       <div class="fl" style="margin:10px;margin-left:20px">
         <el-button class="el-icon-refresh el_search_btn" @click="handle_refresh()">
@@ -60,10 +63,10 @@
         </el-button>
       </div>
       <!-- 用户表单 -->
-      <div class="table_class ">
+      <div class="table_class">
         <el-table
           v-loading="loading"
-          ref="multipleTable"
+          ref="orderTable"
           :data="tableData"
           height="490"
           tooltip-effect="dark"
@@ -71,28 +74,31 @@
           style="width: 100%;margin-top:20px"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55"/>
+          <el-table-column type="selection" width="55" />
           <el-table-column label="工单编号">
-            <template slot-scope="scope">{{ scope.row.time|timeff }}</template>
+            <template slot-scope="scope">{{ scope.row.repair_id }}</template>
           </el-table-column>
           <el-table-column label="标题">
-            <template slot-scope="scope">{{ scope.row.contain }}</template>
+            <template slot-scope="scope">{{ scope.row.title }}</template>
           </el-table-column>
           <el-table-column label="问题描述">
-            <template slot-scope="scope">{{ scope.row.time|timeff }}</template>
+            <template slot-scope="scope">{{ scope.row.ms }}</template>
           </el-table-column>
           <el-table-column label="工作状态">
-            <template slot-scope="scope">{{ scope.row.contain }}</template>
+            <template slot-scope="scope">
+              <span v-if="scope.row.is_del==0">可用</span>
+              <span v-else>不可用</span>
+            </template>
           </el-table-column>
           <el-table-column label="提交时间">
-            <template slot-scope="scope">{{ scope.row.contain }}</template>
+            <template slot-scope="scope">{{ scope.row.contain|timeff }}</template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="80">
             <template slot-scope="scope">
               <el-button
                 size="small"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row,scope.row.freezeid)"
+                @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -107,9 +113,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-
     </el-tab-pane>
-
   </el-tabs>
 </template>
 
@@ -117,78 +121,84 @@
 export default {
   name: '',
   data() {
+    var checktel = (rule, value, callback) => {
+      const regEn = /^1(3|4|5|7|8)\d{9}$/
+      if (!regEn.test(value)) {
+        callback(new Error('请输入正确手机号码'))
+      } else {
+        callback()
+      }
+    }
     return {
+      token: this.$store.state.token,
+      baseurl: this.$store.state.BaseUrl + '/console',
+      activeName: 'addorder',
       order_form: {},
       loading: false,
       searchlabel: '85px',
       addlabel: '80px',
       searchform: {},
-      tableData: [
-        {
-          contain: '二维码地址接口',
-          time: '201405069223'
-        },
-        {
-          contain: '二维码地址接口',
-          intertype: '1',
-          time: '201405069223',
-          appkey: '63c63651b1a26625',
-          appsecret: '675759f9f382299baf9396c9ebb4d7fe'
-        }
-      ],
+      tableData: [],
       delArr: [], // 删除数组
       total: 0,
       currentPage: 1, // 初始页
       pagesize: 10, //    每页的数据
       multipleSelection: [], // 选择值
-      baseurl: `${this.$store.state.bseurl}/xtgl`
+      // 校验规则
+      rule: {
+        lxrdh: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { validator: checktel, trigger: 'blur' }
+        ],
+        title: [
+          { required: true, message: '请输入标题', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+        ],
+        ms: [{ required: true, message: '请填写具体描述', trigger: 'blur' }]
+      }
     }
   },
   mounted() {
     this.handle_gettable()
   },
   methods: {
+    add_order() {
+      const ms = this.order_form.ms
+      const title = this.order_form.title
+      const lxrdh = this.order_form.lxrdh
+      this.$refs['order_form'].validate(valid => {
+        if (valid) {
+          this.$Haxios(
+            this.baseurl + '/addrepairorder',
+            {
+              ms,
+              title,
+              lxrdh
+            },
+            this.token
+          ).then(res => {
+            if (res.data.code === 200) {
+              this.msgalert(res.data.msg, 'success')
+            } else {
+              this.msgalert(res.data.msg, 'error')
+            }
+          })
+        }
+      })
+    },
     handle_gettable() {
-      // this.loading = true
-      let starttime
-      let endtime
-      if (this.searchform.selecttime) {
-        starttime = `${this.searchform.selecttime[0]}000000`
-        endtime = `${this.searchform.selecttime[1]}000000`
-      }
-      const lockstate = this.searchform.lockstate
-      const username = this.searchform.username
-      this.$axios
-        .post(this.baseurl + '/adm_xtgl_djrz', {
-          token: this.$store.state.token,
-          numberpages: this.pagesize,
-          nowpages: this.currentPage,
-          lockstate,
-          username,
-          starttime,
-          endtime
-        })
-        .then(res => {
+      this.loading = true
+      this.$Haxios(this.baseurl + '/selectrepairorder', {}, this.token).then(
+        res => {
           this.loading = false
-          if (res.data.result !== null) {
-            this.tableData = res.data.result[0].djrzPage
-            // 设置分页器
-            this.total = res.data.result[0].conunt * 1
-            this.currentPage = res.data.result[0].nowpages * 1
-            this.pagesize = res.data.result[0].numberpages * 1
-          } else {
-            this.tableData = []
-            this.total = 0
-          }
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          this.tableData = res.data.result
+        }
+      )
     },
     // 局部刷新
     handle_refresh() {
       this.tableData = []
-      this.handle_gettable()
+      // this.handle_gettable()
     },
     // 重置
     handle_reset() {
@@ -267,5 +277,8 @@ export default {
  <style lang="scss" scoped >
 .table_class {
   padding: 20px;
+}
+.order_form_item {
+  margin-bottom: 22px;
 }
 </style>

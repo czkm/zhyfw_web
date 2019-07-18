@@ -1,13 +1,28 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {}
+  },
+  beforeMount() {
+    this.gettoken()
+  },
+  methods: {
+    gettoken() {
+      const token = localStorage.getItem('TOKEN')
+      if (token) {
+        this.$store.commit('set_token', token)
+        console.log('token' + token)
+      }
+    }
+  }
 }
 </script>
 

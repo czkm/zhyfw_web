@@ -27,13 +27,16 @@ const store = new Vuex.Store({
   },
   mutations: {
     // 获取用户信息
-    get_userinfo(state, info) {
-      state.userInfo = info.fzrlxdh
-      state.token = info.token
+    set_token(state, token) {
+      state.token = token
+    },
+    // 获取用户信息
+    set_userinfo(state, info) {
+      state.userInfo = info
       state.islogin = true
     },
     // 获取菜单列表
-    get_menulist(state, list) {
+    set_menulist(state, list) {
       state.menusList = list
     },
 

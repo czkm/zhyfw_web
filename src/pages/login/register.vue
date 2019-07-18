@@ -1,7 +1,9 @@
 <template>
   <div class="login_body">
     <el-card class="login_mian">
-      <div class="login_title">手机注册</div>
+      <div class="login_title">
+        <el-button class="fl" icon="el-icon-arrow-left" circle @click=" gotolink('login')" />
+        手机注册</div>
       <el-button class="verify_btn" type="primary" @click="handleverify()">verify</el-button>
       <Vcode :imgs="[ Img2]" :show="isShow" @onSuccess="onSuccess()" @onClose="onClose" />
       <el-form
@@ -13,10 +15,8 @@
         label-width="80px"
       >
         <el-form-item label="手机号码" prop="phone" class="form_item">
-
           <el-button v-show="btn_show" class="message_btn" type="primary" @click="handlecode()">获取验证码</el-button>
           <el-button v-show="!btn_show" :disabled="true" class="message_btn" type="primary" >{{ count }} s</el-button>
-
           <el-input
             v-model="register_form.phone"
             clearable

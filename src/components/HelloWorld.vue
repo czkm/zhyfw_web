@@ -307,7 +307,9 @@ export default {
       )[0].style.display = status ? 'block' : 'none'
     },
     // 退出登录
-    logout: function() {},
+    logout: function() {
+      this.$router.replace({ path: '/showmain' })
+    },
     // tab切换时，动态的切换路由
     tabClick(tab) {
       const path = this.activeIndex
