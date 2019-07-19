@@ -35,8 +35,8 @@
       <el-row>
         <el-col :span="24">
           <el-form :inline="true" :model="searchform" class="demo-form-inline">
-            <el-form-item :label-width="searchlabel" class="fl" label="冻结人">
-              <el-input v-model="searchform.username" placeholder="冻结人" class="el_input" />
+            <el-form-item :label-width="searchlabel" class="fl" label="标题">
+              <el-input v-model="searchform.username" placeholder="标题" class="el_input" />
             </el-form-item>
             <el-form-item class="fl">
               <el-button

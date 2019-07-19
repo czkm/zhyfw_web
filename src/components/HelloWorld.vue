@@ -56,7 +56,7 @@
             <el-submenu v-for="child2 in child1.children" v-if="child2.children" :index="'/'+child2.location" :key="child2.id" class="menuTwo" style="padding-left: 70px;">
               <template slot="title">
                 <div>
-                  <i :class="child2.iconCls"/>
+                  <i :class="child2.iconCls" />
                   <span slot="title">{{ child2.title }}</span>
                 </div>
               </template>
@@ -280,8 +280,11 @@ export default {
     // 是否显示阴影
     shadow_control() {
       console.log(this.$route.path)
-      if (this.$route.path === '/data_datatotal' ||
-      this.$route.path === '/control_product') {
+      if (
+        this.$route.path === '/data_datatotal' ||
+        this.$route.path === '/control_product' ||
+        this.$route.path === '/main'
+      ) {
         return false
       } else {
         return true

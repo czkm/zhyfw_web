@@ -99,7 +99,7 @@ export default {
       position: relative;
       height: 250px;
       padding: 25px 0;
-      max-width: 1207px;
+      max-width: 1210px;
       margin: 0 auto;
       // background-color: red;
       .card_box {

@@ -140,6 +140,7 @@ export default {
   // height: 50px;
   // background-color: violet;
   .contain_box_item {
+    user-select:none;
     margin: 10px 10px auto;
     padding: 5px;
     width: 250px;

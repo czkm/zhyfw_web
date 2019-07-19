@@ -16,6 +16,8 @@ export default {
   },
   methods: {
     gettoken() {
+      console.log('get token')
+
       const token = localStorage.getItem('TOKEN')
       if (token) {
         this.$store.commit('set_token', token)

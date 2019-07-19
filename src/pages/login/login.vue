@@ -75,10 +75,12 @@ export default {
               const fzrlxdh = res.data.result.fzrlxdh
               const menusList = res.data.result.menusList
               const token = res.data.result.token
+              // localStorage.clear
               localStorage.setItem('TOKEN', token)
               localStorage.setItem('menusList', JSON.stringify(menusList))
 
               this.msgalert(res.data.msg, 'success')
+              this.$store.commit('set_token', token)
               this.$store.commit('set_userinfo', fzrlxdh)
               this.$store.commit('set_menulist', menusList)
               this.gotolink('showmain')

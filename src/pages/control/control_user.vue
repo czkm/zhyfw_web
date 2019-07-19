@@ -38,7 +38,7 @@
               </el-row>
               <el-row class="contian_item_main">
                 <el-col :span="8" class="item_title">邮箱</el-col>
-                <el-col :span="10" class="item_info">{{ login.fzrlxyx }}</el-col>
+                <el-col :span="10" class="item_info">{{ userinfo.fzrlxyx }}</el-col>
                 <el-col :span="2">
                   <el-button type="text">文字按钮</el-button>
                 </el-col>
@@ -260,10 +260,10 @@ export default {
     },
     // onchange 钩子
     qytpgetFile(file, fileList) {
-      // if (!this.imgcheck(file)) {
-      //   console.log('err')
-      //   return false
-      // }
+      if (!this.imgcheck(file)) {
+        console.log('err')
+        return false
+      }
       this.qytpimageUrl = URL.createObjectURL(file.raw)
       this.getBase64(file.raw).then(res => {
         this.verify_form.qytp = res
